@@ -1,0 +1,58 @@
+{
+    "CP_SYM_UPB.mzn": {
+        "time": 0.56,
+        "solve_time": 0.278501,
+        "upper_bound": 16,
+        "optimal": true,
+        "obj": 12,
+        "sol": [
+            [
+                8,
+                3,
+                6,
+                5,
+                8
+            ],
+            [
+                8,
+                4,
+                2,
+                8
+            ],
+            [
+                8,
+                7,
+                1,
+                8
+            ]
+        ]
+    },
+    "CP_SYM_LINUPB.mzn": {
+        "time": 0.6,
+        "solve_time": 0.293762,
+        "upper_bound": 65,
+        "optimal": true,
+        "obj": 12,
+        "sol": [
+            [
+                8,
+                3,
+                6,
+                5,
+                8
+            ],
+            [
+                8,
+                4,
+                2,
+                8
+            ],
+            [
+                8,
+                7,
+                1,
+                8
+            ]
+        ]
+    }
+}
