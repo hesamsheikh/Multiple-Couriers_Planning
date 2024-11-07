@@ -1,0 +1,95 @@
+{
+    "CP_SYM_UPB.mzn": {
+        "time": 0.87,
+        "solve_time": 0.218,
+        "upper_bound": 1326,
+        "lower_bound": null,
+        "optimal": true,
+        "obj": 226,
+        "sol": [
+            [
+                1
+            ],
+            [
+                2,
+                7
+            ],
+            [
+                3,
+                9
+            ],
+            [
+                4
+            ],
+            [
+                5
+            ],
+            [
+                6,
+                8
+            ]
+        ]
+    },
+    "CP_SYM_LINUPB.mzn": {
+        "time": 0.98,
+        "solve_time": 0.161,
+        "upper_bound": 310,
+        "lower_bound": null,
+        "optimal": true,
+        "obj": 226,
+        "sol": [
+            [
+                4,
+                1
+            ],
+            [
+                5
+            ],
+            [
+                6
+            ],
+            [
+                7,
+                2
+            ],
+            [
+                8
+            ],
+            [
+                9,
+                3
+            ]
+        ]
+    },
+    "CP_SYM_VER2.mzn": {
+        "time": 0.94,
+        "solve_time": 0.238,
+        "upper_bound": 310,
+        "lower_bound": 86,
+        "optimal": true,
+        "obj": 226,
+        "sol": [
+            [
+                1
+            ],
+            [
+                3
+            ],
+            [
+                4
+            ],
+            [
+                5,
+                9
+            ],
+            [
+                6,
+                8
+            ],
+            [
+                7,
+                2
+            ]
+        ]
+    }
+}

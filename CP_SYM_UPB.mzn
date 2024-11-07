@@ -150,7 +150,7 @@ output [
             "Courier ", show(k), ":\n    Route: ",
             concat([
                 show(fix(route[k,p])) ++ " "
-                | p in 1..rl
+                | p in 2..rl-1
             ]),
             "\n    Total Distance: ", show(fix(dist[k])), "\n"
         ])
