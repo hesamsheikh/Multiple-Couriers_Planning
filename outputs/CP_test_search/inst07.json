@@ -1,0 +1,11 @@
+{
+    "gecode_CP_test": {
+        "total_time": 300.27,
+        "solve_time": 300.0,
+        "courier_max_lengths": null,
+        "UP": 253,
+        "optimal": false,
+        "obj": 167,
+        "sol": "[1, 3, 6], [2, 9], [4, 11, 12], [5, 13, 15], [7, 8, 17], [10, 14, 16]"
+    }
+}

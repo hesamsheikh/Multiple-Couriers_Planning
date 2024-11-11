@@ -73,11 +73,23 @@ constraint forall(k in Couriers)(
 );
 
 % --------------------------------- Symmetry-Breaking Constraint --------------------------------
-% lexicographical order of routes to avoid symmetry
-constraint forall(k in 1..m-1)(
-    lex_lesseq([route[k,p] | p in Positions], [route[k+1,p] | p in Positions])
+% Improved Symmetry Breaking Constraints
+% 1. Order couriers by total load when they have equal capacity
+constraint forall(i, j in Couriers where i < j /\ l[i] = l[j])(
+    sum(p in 2..route_length[i]-1)(if route[i,p] > 0 then s[route[i,p]] else 0 endif) >=
+    sum(p in 2..route_length[j]-1)(if route[j,p] > 0 then s[route[j,p]] else 0 endif)
 );
 
+% 2. For couriers with different capacities, higher capacity should handle more load
+constraint forall(i, j in Couriers where i < j /\ l[i] > l[j])(
+    sum(p in 2..route_length[i]-1)(if route[i,p] > 0 then s[route[i,p]] else 0 endif) >
+    sum(p in 2..route_length[j]-1)(if route[j,p] > 0 then s[route[j,p]] else 0 endif)
+);
+
+% 3. Break symmetry for empty positions by forcing zeros to appear at the end
+constraint forall(k in Couriers, p in 2..max_route_length-1)(
+    route[k,p] = 0 -> route[k,p+1] = 0
+);
 
 % ------------------- Upper Bound using linear regression formula --------------------------------
 % coefs from Ridge regression model

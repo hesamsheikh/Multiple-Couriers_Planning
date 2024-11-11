@@ -77,11 +77,14 @@ constraint forall(k in Couriers)(
 );
 
 % Symmetry-Breaking Constraints
-% ==============================================================================================
-
-% Enforce lexicographical order of routes
-constraint forall(k in 1..m-1)(
-    lex_lesseq([route[k,p] | p in Positions], [route[k+1,p] | p in Positions])
+% ================= Symmetry Breaking Constraint ===============================================================
+% Symmetry-breaking: Prioritize heavier items for couriers with higher capacities
+constraint forall(i, j in Couriers where i < j)(
+    % If courier i has a higher capacity than courier j, then the total weight of items
+    % assigned to courier i should be greater than or equal to that of courier j
+    (l[i] > l[j]) -> 
+    (sum(p in 2..route_length[i]-1)(if route[i, p] > 0 then s[route[i, p]] else 0 endif) >=
+     sum(p in 2..route_length[j]-1)(if route[j, p] > 0 then s[route[j, p]] else 0 endif))
 );
 
 % ==============================================================================================
@@ -93,10 +96,8 @@ constraint forall(k in Couriers)(
     )
 );
 
-% 7. Maximum Distance
-constraint forall(k in Couriers)(
-    max_dist >= dist[k]
-);
+% Ensure max_dist is the maximum of all dist[k]
+constraint max_dist = max(dist);
 
 % Dynamic Upper Bound Calculation
 % ------------------------------------------------------
@@ -126,7 +127,7 @@ array[Couriers] of int: est_dist = [
 int: UB = max(est_dist);
 
 % Upper bound constraint
-constraint max_dist <= UB;
+% constraint max_dist <= UB;
 
 % ------------------------------------------------------
 

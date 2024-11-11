@@ -74,13 +74,9 @@ constraint forall(k in Couriers)(
 
 % --------------------------------- Symmetry-Breaking Constraint --------------------------------
 % lexicographical order of routes to avoid symmetry
-constraint forall(k in 1..m-1)(
-    lex_lesseq([route[k,p] | p in Positions], [route[k+1,p] | p in Positions])
-);
-
-% additional symmetry breaking for equal-capacity couriers
-constraint forall(k1, k2 in Couriers where k1 < k2 /\ l[k1] = l[k2])(
-    dist[k1] <= dist[k2]
+constraint forall(i,j in Couriers where i < j /\ l[i] = l[j])(
+    lex_lesseq([route[i,p] | p in 1..max_route_length],
+               [route[j,p] | p in 1..max_route_length])
 );
 
 % ------------------- Upper Bound using linear regression formula --------------------------------
@@ -124,7 +120,7 @@ array[Couriers] of int: courier_min_dists = [
     | k in Couriers
 ];
 
-int: LB = max(courier_min_dists) - 10;  % Max of minimum distances based on item distribution feasibility
+int: LB = max(courier_min_dists) - 20;  % Max of minimum distances based on item distribution feasibility
 
 
 % -------------------------- Calculation of Maximum Distance -------------------------------------
