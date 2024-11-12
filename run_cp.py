@@ -2,9 +2,9 @@ import subprocess
 import os
 import json
 import re
+import argparse
 
 def parse_output_into_json(output_string):
-    # Parse the output
     max_distance_match = re.search(r'maximum distance of any courier: (\d+)', output_string)
     max_distance = int(max_distance_match.group(1)) if max_distance_match else None
 
@@ -28,12 +28,9 @@ def parse_output_into_json(output_string):
     solve_time_match = re.search(r'%%%mzn-stat: solveTime=([\d.]+)', output_string)
     solve_time = float(solve_time_match.group(1)) if solve_time_match else None
 
-    # Create the JSON object
     result = {
         "total_time": time_elapsed,
         "solve_time": solve_time,
-        "courier_max_lengths": courier_max_lengths,
-        "UP": max_possible_dist,
         "optimal": False if time_elapsed > 300 else True,
         "obj": max_distance,
         "sol": courier_routes,
@@ -68,66 +65,74 @@ def run_subprocess(instance_path, model, solver_type="gecode"):
         return None
 
 
-def solve_instance_cp(models, instance_path, solver_types):
-    output_json = {}
-
-    for model in models:
-        for solver in solver_types:
-            output_string = run_subprocess(instance_path, model, solver)
-            if output_string:
-                output_json[solver+"_"+model.split(".")[0]] = parse_output_into_json(output_string)
-                ...
-
+def solve_instance_cp(instance_path, model, solver_type, output_json):
+    output_string = run_subprocess(instance_path, model, solver_type)
+    model_name = os.path.basename(model).split(".")[0]
+    solved_instance_name = f"{solver_type}_{model_name}"
+    if output_string:
+        output_json[solved_instance_name] = parse_output_into_json(output_string)
+    else: #timeout
+        output_json[solved_instance_name] = {"total_time": "timeout"}
+        ...
+    
     return output_json
 
-def save_json_output(json_data):
-    # Save the JSON output to the output directory
+def save_json_output(json_data, instance_file, output_dir):
     json_filename = f"{os.path.splitext(instance_file)[0]}.json"
     json_path = os.path.join(output_dir, json_filename)
     with open(json_path, 'w') as json_file:
         json.dump(json_data, json_file, indent=4)
     ...
 
-if __name__=="__main__":
-    DEBUG = 1
-    instances_dir = "instances_dzn"
-    output_dir = "outputs/CP_test_search"
-    exclude_list = [
-        "inst11.dat",
-        "inst14.dat",
-        "inst15.dat",
-        "inst18.dat",
-        "inst20.dat",
-    ]
-    models = [
-        # "CP_NO_SYMBRK.mzn",
-        # "CP_OPT.mzn",
-        "CP_test.mzn",
-        # "CP_SYM_VER2.mzn",
-        ]
-    solver_types = [
-        "gecode", 
-        # "chuffed"
-        ]
 
-
-    # create a directory if not exists
+def main(instances_dir, output_dir):
+    # main section of the code 
     os.makedirs(output_dir, exist_ok=True)
 
     # solve each instance in the directory
-    for instance_file in os.listdir(instances_dir)[13:19]:
-        if instance_file in exclude_list: 
-            pass
+    for instance_file in os.listdir(instances_dir):
+        # if os.path.basename(instance_file) in exclude_list: 
+        #     continue
         if not instance_file.endswith(".dzn"):
             print("File type must be .dzn.")
             continue
         instance_path = os.path.join(instances_dir, instance_file)
-        
         print(f"Solving {instance_file}")
-        output_json = solve_instance_cp(models, instance_path, solver_types)
+        
+        output_json = {}
+        for solver_type, models in solver.items():
+            for model in models:
+                model = os.path.join(solver_folder, model)
+                output_json = solve_instance_cp(instance_path, model, solver_type, output_json)
 
         if output_json:
-            save_json_output(output_json)
-        ...
+            save_json_output(output_json, instance_file, output_dir)
+
+
+if __name__=="__main__":
+    DEBUG = 0
+    # instances_dir = "instances/instances_dzn"
+    # output_dir = "outputs/six_solvers"
+    solver_folder = "solvers"
+    solver = {
+        "gecode":[
+            "CP_SYM_LB_RML_HRSTIC_GECODE.mzn",
+            "CP_SYM_LB.mzn",
+            "CP.mzn",
+        ]
+        ,
+        "chuffed":[
+            "CP_SYM_LB_RML_HRSTIC_CHUFFED.mzn",
+            "CP_SYM_LB.mzn",
+            "CP.mzn",
+        ]
+    }
+
+    parser = argparse.ArgumentParser(description="run the CP solver.")
+    parser.add_argument("instances_dir", help="folder containing instance files.")
+    parser.add_argument("output_dir", help="output folder to save results in json.")
+    args = parser.parse_args()
+
+    main(args.instances_dir, args.output_dir)
 
 ...

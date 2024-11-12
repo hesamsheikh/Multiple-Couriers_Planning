@@ -76,7 +76,7 @@ constraint max_dist = max(k in Couriers)(dist[k]);
 
 % ================ symmetry-breaking constraint ================
 % for couriers of the same capacity 
-constraint forall(i,j in Couriers where i<j /\ l[i]=;[j])(
+constraint forall(i,j in Couriers where i<j /\ l[i]=l[j])(
     lex_lesseq([route[i,p] | p in 1..max_route_length], [route[j,p] | p in 1..max_route_length])
 );
 
@@ -90,7 +90,7 @@ solve :: seq_search([
     % 2: route length optimization
     int_search(route_length, 
                first_fail,
-               indomain_random,
+               indomain_max,
                complete),
     relax_and_reconstruct([route[k,p] | k in Couriers, p in Positions], 30),
 ]) minimize max_dist;
