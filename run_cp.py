@@ -114,19 +114,19 @@ solver = {
     "gecode":[
         "CP_SYM_LB_RML_HRSTIC_GECODE.mzn",
         "CP_SYM_LB.mzn",
-        # "CP.mzn",
+        "CP.mzn",
     ]
     ,
     "chuffed":[
         "CP_SYM_LB_RML_HRSTIC_CHUFFED.mzn",
-        # "CP_SYM_LB.mzn",
-        # "CP.mzn",
+        "CP_SYM_LB.mzn",
+        "CP.mzn",
     ]
 }
 
 if __name__=="__main__":
     # instances_dir = "instances/instances_dzn"
-    # output_dir = "outputs/test"
+    # output_dir = "outputs_test"
 
     parser = argparse.ArgumentParser(description="run the CP solver.")
     parser.add_argument("instances_dir", help="folder containing instance files.")
