@@ -89,7 +89,7 @@ def main(instances_dir, output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
     # solve each instance in the directory
-    for instance_file in os.listdir(instances_dir):
+    for instance_file in os.listdir(instances_dir)[9:10]:
         # if os.path.basename(instance_file) in exclude_list: 
         #     continue
         if not instance_file.endswith(".dzn"):
@@ -112,28 +112,28 @@ DEBUG = 0
 solver_folder = os.path.join(os.path.dirname(__file__),  "solvers")
 solver = {
     "gecode":[
-        "CP_SYM_LB_RML_HRSTIC_GECODE.mzn",
+        # "CP_SYM_LB_RML_HRSTIC_GECODE.mzn",
         "CP_SYM_LB.mzn",
-        "CP.mzn",
+        # "CP.mzn",
     ]
     ,
     "chuffed":[
-        "CP_SYM_LB_RML_HRSTIC_CHUFFED.mzn",
-        "CP_SYM_LB.mzn",
-        "CP.mzn",
+        # "CP_SYM_LB_RML_HRSTIC_CHUFFED.mzn",
+        # "CP_SYM_LB.mzn",
+        # "CP.mzn",
     ]
 }
 
 if __name__=="__main__":
-    # instances_dir = "instances/instances_dzn"
-    # output_dir = "outputs_test"
+    instances_dir = "instances/instances_dzn"
+    output_dir = "outputs_test"
 
-    parser = argparse.ArgumentParser(description="run the CP solver.")
-    parser.add_argument("instances_dir", help="folder containing instance files.")
-    parser.add_argument("output_dir", help="output folder to save results in json.")
-    args = parser.parse_args()
-    instances_dir = args.instances_dir
-    output_dir = args.output_dir
+    # parser = argparse.ArgumentParser(description="run the CP solver.")
+    # parser.add_argument("instances_dir", help="folder containing instance files.")
+    # parser.add_argument("output_dir", help="output folder to save results in json.")
+    # args = parser.parse_args()
+    # instances_dir = args.instances_dir
+    # output_dir = args.output_dir
 
     main(instances_dir, output_dir)
 
